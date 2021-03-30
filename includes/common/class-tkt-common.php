@@ -3,16 +3,6 @@
 /**
  * The TukuToi Common functionality.
  *
- * @link       https://www.tukutoi.com/
- * @since      1.0.0
- *
- * @package    Tw_Seo
- * @subpackage Tw_Seo/common
- */
-
-/**
- * The TukuToi Common functionality.
- *
  * Define Common Constants, menus, version and scripts.
  *
  * @package    Tw_Seo
@@ -61,6 +51,10 @@ class TKT_Common {
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
+     * @param      string    $vendor_name       Name of the Vendor.
+     * @param      string    $common_name       Name of Common Code loaded.
+     * @param      string    $common_version    Version of Common Code loaded.
+     * @param      array    $common_actions    Array of Commmon Actions and Filters loaded.
      */
     public function __construct() {
 
@@ -82,8 +76,8 @@ class TKT_Common {
             'define_loaded',
             'define_menu_icon',
             'define_wpml_active',
-            'add_actions',
-            'add_filters',
+            'add_actions',//native WP Actions
+            'add_filters',//native WP Filters
         );
     }
 
@@ -106,7 +100,7 @@ class TKT_Common {
      * @access   private
      */
     private function add_filters(){
-        
+        //non yet
     }
 
     /**
@@ -127,6 +121,21 @@ class TKT_Common {
      */
     private function define_loaded(){
         define('TKT_COMMON_LOADED', true);
+    }
+    
+    /**
+     * Define if WPML is active
+     *
+     * @since    1.0.0
+     * @access   private
+     */
+    private function define_wpml_active(){
+        if ( function_exists('icl_object_id') ) {
+            define( 'TKT_WPML_IS_ACTIVE', true );
+        }
+        else{
+            define( 'TKT_WPML_IS_ACTIVE', false );
+        }
     }
 
     /**
@@ -159,14 +168,54 @@ class TKT_Common {
         return $html;
 
     }
+    
+    /**
+     * Render General Options Calback
+     *
+     * @since 1.0.0
+     * @access private
+     */
+    private function set_general_options_callback($pre, $middle, $end, $locale) {
+        echo '<p>' . __( $pre, $locale ) . '<strong>' . $middle . '</strong>' . __( $end, $locale ) . '</p>';
+    } 
 
-    private function define_wpml_active(){
-        if ( function_exists('icl_object_id') ) {
-            define( 'TKT_WPML_IS_ACTIVE', true );
-        }
-        else{
-            define( 'TKT_WPML_IS_ACTIVE', false );
-        }
+     /**
+     * Render Settings Page
+     *
+     * @since 1.0.0
+     * @access private
+     */
+    private function set_render_settings_page_content( $active_tab = '', $field = '', $section = '', $locale = '' ) {
+        
+        ?>
+        <div class="wrap">
+
+            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+            <?php settings_errors(); ?>
+            <hr>
+
+            <div>
+                <div class="main-dashboard-inner">
+                    <form action="options.php" method="post">
+                        <?php
+                        // output security fields for the registered setting
+                        settings_fields( $field );
+                        // output setting sections and their fields
+                        do_settings_sections( $section );
+                        // output save settings button
+                        submit_button( __( 'Save Settings', $locale  ) );
+                        ?>
+                    </form>
+                </div>
+            </div>
+            
+            <hr>
+                    
+            <?php echo $this->feedback_box();?>
+
+        </div>      
+        <?php
+
     }
 
     /**
@@ -227,7 +276,7 @@ class TKT_Common {
     }
 
     /**
-     * Prive Defaults for this Plugins Settings Options.
+     * Provide Defaults for this Plugins Settings Options.
      *
      * @return array
      * @since 1.0.0
@@ -251,7 +300,6 @@ class TKT_Common {
      */
     public function settings_init() {
 
-        // If the options don't exist, create them.
         if( false == get_option( $this->common_name ) ) {
             $default_array = $this->settings_options_defaults();
             add_option( $this->common_name, $default_array );
@@ -317,56 +365,7 @@ class TKT_Common {
     }
 
     /**
-     * Render General Options Calback
-     *
-     * @since 1.0.0
-     * @access public
-     */
-    public function set_general_options_callback($pre, $middle, $end, $locale) {
-        echo '<p>' . __( $pre, $locale ) . '<strong>' . $middle . '</strong>' . __( $end, $locale ) . '</p>';
-    } 
-
-     /**
-     * Render Settings Page
-     *
-     * @since 1.0.0
-     * @access public
-     */
-    public function set_render_settings_page_content( $active_tab = '', $field = '', $section = '', $locale = '' ) {
-        
-        ?>
-        <div class="wrap">
-
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            <?php settings_errors(); ?>
-            <hr>
-
-            <div>
-                <div class="main-dashboard-inner">
-                    <form action="options.php" method="post">
-                        <?php
-                        // output security fields for the registered setting
-                        settings_fields( $field );
-                        // output setting sections and their fields
-                        do_settings_sections( $section );
-                        // output save settings button
-                        submit_button( __( 'Save Settings', $locale  ) );
-                        ?>
-                    </form>
-                </div>
-            </div>
-            
-            <hr>
-                    
-            <?php echo $this->feedback_box();?>
-
-        </div>      
-        <?php
-
-    }
-
-    /**
-     * General Options Callback API
+     * General Options Callback
      *
      * @since 1.0.0
      * @access public
@@ -376,7 +375,7 @@ class TKT_Common {
     }
 
     /**
-     * Render Settings Page API
+     * Render Settings Page
      *
      * @since 1.0.0
      * @access public
