@@ -13,8 +13,11 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
+ * Defines the plugin name, version, human name, 
+ * registers scripts and styles 
+ * instantiates Toolset Types fields
+ * creates Sitemap XML
+ * loads Settings Class dependency
  *
  * @package    Tw_Seo
  * @subpackage Tw_Seo/admin
@@ -64,7 +67,9 @@ class Tw_Seo_Admin {
      *
      * @since    1.0.0
      * @param      string    $plugin_name       The name of this plugin.
-     * @param      string    $version    The version of this plugin.
+     * @param      string    $version           The version of this plugin.
+     * @param      string    $human_plugin_name The human name of this plugin.
+     * @param      array    $fields             The slugs of the Fields to create/use.
      */
     public function __construct( $plugin_name, $human_plugin_name, $version ) {
 
@@ -77,16 +82,25 @@ class Tw_Seo_Admin {
 
     }
 
+    /**
+     * Include file with Settings Class
+     * @since 1.0.0
+     * @access private
+     */
     private function load_dependencies() {
 
         /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
+         * The Class responsible to create and manage settings in options page for this plugin
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) .  'admin/class-tw-seo-settings.php';
 
     }
 
+    /**
+     * Build array with Field slugs and definitions
+     * @since 1.0.0
+     * @access private
+     */
     private function instantiate_fields(){
 
         $frequency_options = array(
@@ -154,18 +168,6 @@ class Tw_Seo_Admin {
      */
     public function register_styles() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Tw_Seo_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Tw_Seo_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
-
         wp_register_style( $this->plugin_name . '-styles', plugin_dir_url( __FILE__ ) . 'css/tw-seo-admin.css', array(), $this->version, 'all' );
 
     }
@@ -175,19 +177,7 @@ class Tw_Seo_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
-
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Tw_Seo_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Tw_Seo_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
+    public function register_scripts() {
 
         wp_register_script( $this->plugin_name . '-scripts', plugin_dir_url( __FILE__ ) . 'js/tw-seo-admin.js', array( 'jquery' ), $this->version, false );
 
