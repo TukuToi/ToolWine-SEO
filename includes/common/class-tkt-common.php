@@ -62,6 +62,7 @@ class TKT_Common {
         $this->common_name      = 'tkt_common';
         $this->common_version   = '1.0.0';
         $this->common_actions   = array();
+        $this->define_loaded();
 
     }
 
@@ -73,7 +74,6 @@ class TKT_Common {
      */
     private function common_actions(){
         $this->common_actions = array(
-            'define_loaded',
             'define_menu_icon',
             'define_wpml_active',
             'add_actions',//native WP Actions
@@ -175,7 +175,7 @@ class TKT_Common {
      * @since 1.0.0
      * @access private
      */
-    private function set_general_options_callback($pre, $middle, $end, $locale) {
+    public function set_general_options_callback($pre, $middle, $end, $locale) {
         echo '<p>' . __( $pre, $locale ) . '<strong>' . $middle . '</strong>' . __( $end, $locale ) . '</p>';
     } 
 
@@ -183,9 +183,9 @@ class TKT_Common {
      * Render Settings Page
      *
      * @since 1.0.0
-     * @access private
+     * @access public
      */
-    private function set_render_settings_page_content( $active_tab = '', $field = '', $section = '', $locale = '' ) {
+    public function set_render_settings_page_content( $active_tab = '', $field = '', $section = '', $locale = '' ) {
         
         ?>
         <div class="wrap">
@@ -403,9 +403,6 @@ class TKT_Common {
      * @access   public
      */
     public function maybe_load(){
-
-        if (defined('TKT_COMMON_LOADED'))
-            return;
 
         $this->load();
 
