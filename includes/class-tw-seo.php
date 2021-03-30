@@ -141,7 +141,6 @@ class Tw_Seo {
 
         if( !defined( 'TKT_COMMON_LOADED' ) ){
             require_once( plugin_dir_path( dirname( __FILE__ ) ).'includes/common/class-tkt-common.php' );
-
         }
         $this->common = new TKT_Common();
         
