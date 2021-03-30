@@ -469,10 +469,10 @@ class Tw_Seo_Public {
                 'commentCount'      => get_comments_number(),
                 'dateModified'      => get_the_modified_date(),
                 'datePublished'     => get_the_date(),
-                'description'       => get_the_excerpt($post),
-                'headline'          => get_the_title($post) .' | '. get_bloginfo('name'),
-                'mainEntityOfPage'  => get_permalink($post),
-                'name'              => get_the_title($post),
+                'description'       => get_the_excerpt(get_post($this->ID)),
+                'headline'          => get_the_title(get_post($this->ID)) .' | '. get_bloginfo('name'),
+                'mainEntityOfPage'  => get_permalink(get_post($this->ID)),
+                'name'              => get_the_title(get_post($this->ID)),
                 'publisher'         => array(
                     '@type'     => "Organization",
                     'name'      => get_bloginfo('name'),
@@ -482,8 +482,8 @@ class Tw_Seo_Public {
                         'url'   => $logo,
                     ),
                 ),
-                'url'               => get_permalink($post),
-                'image'             => has_post_thumbnail( $post->ID ) ? wp_get_attachment_url( get_post_thumbnail_id($post->ID), 'thumbnail' ) : $logo,
+                'url'               => get_permalink(get_post($this->ID)),
+                'image'             => has_post_thumbnail( $this->ID ) ? wp_get_attachment_url( get_post_thumbnail_id($this->ID), 'thumbnail' ) : $logo,
             );
 
             array_push( $schema, $single );
