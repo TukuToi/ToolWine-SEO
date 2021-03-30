@@ -32,9 +32,9 @@ class Tw_Seo_Activator {
 	public static function activate() {
 
 		if ( ! is_plugin_active( 'types/wpcf.php' ) and current_user_can( 'activate_plugins' ) ) {
-        // Stop activation redirect and show error
-        wp_die('Sorry, but this plugin requires the Toolset Types Plugin to be installed and active. <br><a href="' . admin_url( 'plugins.php' ) . '">&laquo; Return to Plugins</a>');
-    	}
+        		// Stop activation redirect and show error
+        		wp_die('Sorry, but this plugin requires the Toolset Types Plugin to be installed and active. <br><a href="' . admin_url( 'plugins.php' ) . '">&laquo; Return to Plugins</a>');
+    		}
 
 	}
 
