@@ -90,7 +90,7 @@ class Tw_Seo_Admin {
     private function load_dependencies() {
 
         /**
-         * The Class responsible to create and manage settings in options page for this plugin
+         * The class responsible for defining and instantiating all Setttings in the Plugins options page.
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) .  'admin/class-tw-seo-settings.php';
 
