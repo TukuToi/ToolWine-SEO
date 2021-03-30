@@ -1,0 +1,59 @@
+.alert {
+    padding: 20px;
+    border-left: solid;
+    border-left-width: 4px;
+    border-left-color: #f44336;
+    color: #000;
+    margin-bottom: 15px;
+}
+.success {
+    border-left-color: #4caf50;
+}
+.tkt_page_reload_icon {
+    cursor: pointer;
+    font-size: 15px;
+}
+table {
+    border-spacing: 0;
+    width: 98%;
+    border: 1px solid #ddd;
+}
+.form-table th,
+td,
+th {
+    text-align: left;
+    padding: 16px;
+}
+tr:nth-child(even) {
+    background-color: #505d6326;
+}
+tr.repeats {
+    background-color: #ca2b2b29;
+}
+a.in-resolution-link {
+    color: #000;
+}
+a.in-resolution-link:hover {
+    color: #fff;
+}
+label[for="tkt_feedback_limit"] {
+    vertical-align: sub;
+}
+.tkt-option-input {
+    float: right;
+    min-width: 38%;
+}
+.tkt-query-input {
+    min-width: 300px;
+}
+.tkt-limit-input {
+    max-width: 50px;
+}
+.update-nag {
+    display: flex;
+    padding: unset;
+    padding-left: 15px;
+}
+div.main-dashboard-inner {
+    padding: 15px;
+}
