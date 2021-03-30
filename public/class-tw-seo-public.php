@@ -98,8 +98,14 @@ class Tw_Seo_Public {
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
-     * @param      string    $plugin_name       The name of the plugin.
-     * @param      string    $version    The version of this plugin.
+     * @param      string    $plugin_name   The name of the plugin.
+     * @param      string    $version       The version of this plugin.
+     * @param      array     $options       The Options of this plugin
+     * @param      string    $title         The title of the current object.
+     * @param      string    $ID            The id of the current object.
+     * @param      string    $term_ID       The term ID of the current term.
+     * @param      string    $url           The url of the current object.
+     * @param      string    $image         The image if the current object.
      */
     public function __construct( $plugin_name, $version ) {
 
@@ -121,7 +127,7 @@ class Tw_Seo_Public {
      */
     private function get_current_object_data(){
 
-        global $post, $wp_query;
+        global $wp_query;
 
         if( is_singular() ){
             $this->ID       = get_the_ID();
@@ -131,7 +137,7 @@ class Tw_Seo_Public {
                 $this->image = $this->options[$this->plugin_name .'_logo']; //replace this with a default image on your server or an image in your media library
             }
             else{
-                $this->image = esc_attr(wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'medium' ))[0];
+                $this->image = esc_attr(wp_get_attachment_image_src( get_post_thumbnail_id( $this->ID ), 'medium' ))[0];
             }
             if( is_front_page() ) 
                 $this->title = get_bloginfo('name') . ' | ' . get_bloginfo('description');
