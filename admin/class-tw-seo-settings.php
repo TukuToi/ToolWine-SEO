@@ -56,8 +56,10 @@ class Tw_Seo_Admin_Settings {
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
-     * @param      string    $plugin_name       The name of this plugin.
-     * @param      string    $version    The version of this plugin.
+     * @param      string       $plugin_name       The name of this plugin.
+     * @param      string       $version           The version of this plugin.
+     * @param      string       $human_plugin_name The human name of this plugin.
+     * @param      TKT_Common   $common            The TukuToi Common Code Class.
      */
     public function __construct( $plugin_name, $human_plugin_name, $version, $common ) {
 
@@ -70,7 +72,7 @@ class Tw_Seo_Admin_Settings {
 
     /**
      * Enqueue Styles in Settings page
-     *
+     * (registered in Tw_Seo_Admin)
      * @since    1.0.0
      * @access   public
      */
@@ -140,7 +142,7 @@ class Tw_Seo_Admin_Settings {
     }
 
     /**
-     * Prive Defaults for this Plugins Settings Options.
+     * Provide Defaults for this Plugins Settings Options.
      *
      * @return array
      * @since 1.0.0
@@ -157,7 +159,6 @@ class Tw_Seo_Admin_Settings {
             $this->plugin_name .'_header'           => "",
             $this->plugin_name .'_schema_maps'      => get_post_types(array('public'=>true)),
             $this->plugin_name .'_sitemap'          => get_post_types(array('public'=>true)),
-            //Add meta box by post to exclude specific scriptts or stypes onthere
         );
 
         return $defaults;
@@ -165,7 +166,7 @@ class Tw_Seo_Admin_Settings {
     }
 
     /**
-     * Initialise all Common Settings
+     * Initialise all Option Settings
      *
      * @since 1.0.0
      * @access public
@@ -190,8 +191,7 @@ class Tw_Seo_Admin_Settings {
         //Why create as many functions as there are options? Just use foreach($settings_array) to create each settings field
         foreach ($this->settings_options() as $option => $name) {
             add_settings_field(
-                $option, // as of WP 4.6 this value is used only internally
-                 // use $args' label_for to populate the id inside the callback
+                $option,
                 __( $name, $this->plugin_name ),
                 array($this, $option . '_cb'),
                 $this->plugin_name,
@@ -207,7 +207,7 @@ class Tw_Seo_Admin_Settings {
 
         register_setting( $this->plugin_name, $this->plugin_name );
 
-    } // end wppb-demo_initialize_theme_options
+    }
 
     /**
      * General Options Callback API
@@ -219,9 +219,7 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_main_description_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
-        // output the field
         ?><span class="description"><?php _e( 'Enter the main SEO description of your Website (<a href="https://schema.org/description" target="_blank"><code>description:</code></a>)', $this->plugin_name ); ?>
             </span>
             <input type="text" class="tkt-option-input" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args[$this->plugin_name .'_custom_data'] ); ?>" name="<?php echo $this->plugin_name ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $options[$this->plugin_name .'_main_description'] ? $options[$this->plugin_name .'_main_description'] : ''?>">
@@ -229,9 +227,7 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_fbappid_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
-        // output the field
         ?><span class="description"><?php _e( 'Add Facebook App ID here', $this->plugin_name ); ?>
             </span>
             <input type="text" class="tkt-option-input" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args[$this->plugin_name .'_custom_data'] ); ?>" name="<?php echo $this->plugin_name ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $options[$this->plugin_name .'_fbappid'] ? $options[$this->plugin_name .'_fbappid'] : ''?>">
@@ -239,9 +235,7 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_logo_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
-        // output the field
         ?><span class="description"><?php _e( 'Add the URL to the fallback Image you want to use in SEO global "logo" options (<a href="https://schema.org/image" target="_blank"><code>image:</code></a>)', $this->plugin_name ); ?>
             </span>
             <input type="text" class="tkt-option-input" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args[$this->plugin_name .'_custom_data'] ); ?>" name="<?php echo $this->plugin_name ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $options[$this->plugin_name .'_logo'] ? $options[$this->plugin_name .'_logo'] : ''?>">   
@@ -249,7 +243,6 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_social_media_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
         ?><span class="description"><?php _e( 'Add comma-separated URLs to your Social Media Accounts (<a href="https://schema.org/sameAs" target="_blank"><code>sameAs:</code></a>)', $this->plugin_name ); ?>
             </span>
@@ -260,9 +253,7 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_gtag_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
-        // output the field
         ?><span class="description"><?php _e( 'Enter the Google Search ID like <code>AL-382947598234-3</code>', $this->plugin_name ); ?>
             </span>
             <input type="text" class="tkt-option-input" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args[$this->plugin_name .'_custom_data'] ); ?>" name="<?php echo $this->plugin_name ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $options[$this->plugin_name .'_gtag'] ? $options[$this->plugin_name .'_gtag'] : ''?>">
@@ -270,7 +261,6 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_header_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
         ?><span class="description"><?php _e( 'Add any HTML that you want in the Header', $this->plugin_name ); ?>
             </span>
@@ -279,7 +269,6 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_schema_maps_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
         if($options === false || !is_array($options))
             return;
@@ -322,7 +311,6 @@ class Tw_Seo_Admin_Settings {
     }
 
     public function tw_seo_sitemap_cb( $args ) {
-        // get the value of the setting we've registered with register_setting()
         $options = get_option( $this->plugin_name );
         if($options === false || !is_array($options))
             return;
