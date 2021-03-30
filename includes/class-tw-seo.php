@@ -67,15 +67,6 @@ class Tw_Seo {
     protected $version;
 
     /**
-     * Load TukuToi Common Code.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      TKT_Common    $common    Loads TukuToi Plugins Common Code. 
-     */
-    protected $common;
-
-    /**
      * Define the core functionality of the plugin.
      *
      * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -147,9 +138,13 @@ class Tw_Seo {
         /**
          * TukuToi Common Code
          */
-        require_once( plugin_dir_path( dirname( __FILE__ ) ).'includes/common/class-tkt-common.php' );
 
+        if( !defined( 'TKT_COMMON_LOADED' ) ){
+            require_once( plugin_dir_path( dirname( __FILE__ ) ).'includes/common/class-tkt-common.php' );
+
+        }
         $this->common = new TKT_Common();
+        
         $this->loader = new Tw_Seo_Loader();
 
     }
@@ -180,8 +175,8 @@ class Tw_Seo {
      */
     private function define_admin_hooks() {
 
-        $plugin_admin    = new Tw_Seo_Admin( $this->get_plugin_name(), $this->get_human_plugin_name(), $this->get_version() );
-        $plugin_settings = new Tw_Seo_Admin_Settings( $this->get_plugin_name(), $this->get_human_plugin_name(), $this->get_version(), $this->common );
+        $plugin_admin       = new Tw_Seo_Admin( $this->get_plugin_name(), $this->get_human_plugin_name(), $this->get_version() );
+        $plugin_settings    = new Tw_Seo_Admin_Settings( $this->get_plugin_name(), $this->get_human_plugin_name(), $this->get_version(), $this->common );
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'register_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'register_scripts' );
