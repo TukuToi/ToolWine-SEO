@@ -184,7 +184,7 @@ class Tw_Seo {
         $plugin_settings = new Tw_Seo_Admin_Settings( $this->get_plugin_name(), $this->get_human_plugin_name(), $this->get_version(), $this->common );
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'register_styles' );
-        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'register_scripts' );
         $this->loader->add_action( 'publish_post', $plugin_admin, 'create_sitemap' );
         $this->loader->add_action( 'publish_page', $plugin_admin, 'create_sitemap' );
         $this->loader->add_action( 'save_post', $plugin_admin, 'create_sitemap' );
