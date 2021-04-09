@@ -141,6 +141,7 @@ class Tw_Seo {
 
         if( !defined( 'TKT_COMMON_LOADED' ) ){
             require_once( plugin_dir_path( dirname( __FILE__ ) ).'includes/common/class-tkt-common.php' );
+
         }
         $this->common = TKT_Common::getInstance();
         
@@ -187,7 +188,7 @@ class Tw_Seo {
         $this->loader->add_action( 'admin_menu', $plugin_settings, 'setup_plugin_menu', 11 );
         $this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_settings' );
 
-        $this->loader->add_action( 'init', $this->common, 'maybe_load' );
+        $this->loader->add_action( 'init', $this->common, 'load' );
 
 
     }
@@ -204,6 +205,7 @@ class Tw_Seo {
         $plugin_public = new Tw_Seo_Public( $this->get_plugin_name(), $this->get_version() );
 
         $this->loader->add_action( 'wp_head', $plugin_public, 'setup_current_object_data', 1);
+        $this->loader->add_action( 'wp_head', $plugin_public, 'add_metatags', 1);
         $this->loader->add_action( 'wp_head', $plugin_public, 'add_schema_org');
         $this->loader->add_action( 'wp_head', $plugin_public, 'add_google_gtag_js');
         $this->loader->add_action( 'wp_head', $plugin_public, 'add_header_html');
@@ -212,7 +214,8 @@ class Tw_Seo {
         $this->loader->add_filter( 'language_attributes', $plugin_public, 'opengraph_doctype');
         $this->loader->add_filter( 'get_the_archive_title', $plugin_public, 'remove_archive_titles' );
         $this->loader->add_filter( 'document_title_parts', $plugin_public, 'custom_document_title', 999 );
-        
+        $this->loader->add_filter( 'init', $plugin_public, 'remove_default_html_tags' );
+           
 
     }
 
