@@ -95,6 +95,15 @@ class Tw_Seo_Public {
     private $image;
 
     /**
+     * The Excerpt of the currnet post, page, or as defined in settings
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $excerpt    The Excerpt of the currnet post, page, or as defined in settings
+     */
+    private $excerpt;
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
@@ -113,6 +122,7 @@ class Tw_Seo_Public {
         $this->version      = $version;
         $this->options      = get_option( $this->plugin_name );
         $this->title        = '';
+        $this->excerpt      = '';
         $this->ID           = '';
         $this->term_ID      = '';
         $this->url          = '';
@@ -133,11 +143,12 @@ class Tw_Seo_Public {
             $this->ID       = get_the_ID();
             $this->title    = get_the_title();
             $this->url      = get_permalink();
+            $this->excerpt  = get_the_excerpt();
             if( !has_post_thumbnail( $this->ID )) { //the post does not have featured image, use a default image
                 $this->image = $this->options[$this->plugin_name .'_logo']; //replace this with a default image on your server or an image in your media library
             }
             else{
-                $this->image = esc_attr(wp_get_attachment_image_src( get_post_thumbnail_id( $this->ID ), 'medium' ))[0];
+                $this->image = esc_attr(wp_get_attachment_image_src( get_post_thumbnail_id( $this->ID, 'medium' ))[0]);
             }
             if( is_front_page() ) 
                 $this->title = get_bloginfo('name') . ' | ' . get_bloginfo('description');
@@ -159,6 +170,68 @@ class Tw_Seo_Public {
                 $this->title = get_bloginfo('name') . ' | Date Archives';
             $this->url = home_url( $_SERVER['REQUEST_URI'] );
         }
+
+    }
+
+    public function remove_default_html_tags(){
+        remove_filter ('term_description', 'wpautop');
+    }
+
+    /**
+     * Add Meta Tags title, description, keywords, author
+     * @since 1.0.0
+     * @access public
+     */
+    public function add_metatags( $output ) {
+
+        $title = !empty( get_post_meta( $this->ID, $this->plugin_name .'-title', true) ) ? get_post_meta( $this->ID, $this->plugin_name .'-title', true) : $this->title;
+        //<meta name="Description" content="Written by A.N. Author, 
+        //Illustrated by V. Gogh, Price: $17.99, 
+        //Length: 784 pages">
+        $description = !empty( get_post_meta( $this->ID, $this->plugin_name .'-description', true) ) ? get_post_meta( $this->ID, $this->plugin_name .'-description', true) : $this->excerpt;
+        $description = !empty( $description ) ? $description : get_bloginfo('description');
+        $keywords = get_post_meta( $this->ID, $this->plugin_name .'-keywords', true);
+        $author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $this->ID ) );
+        
+        if(is_archive()){
+            if(is_tax() || is_category() || is_tag()){
+                $title = get_the_archive_title();
+                //<meta name="Description" content="Written by A.N. Author, 
+                //Illustrated by V. Gogh, Price: $17.99, 
+                //Length: 784 pages">
+                $description = term_description( $this->term_ID );
+                $description = !empty( $description ) ? $description : get_bloginfo('description');
+                /**
+                 *@todo do not hardcode this
+                 */
+                $keywords = get_term_meta($this->term_ID, 'wpcf-'.$this->fields['keywords'].'-term', true);
+                $author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $this->ID ) );
+            }
+            if(is_post_type_archive()){
+                $title = get_the_archive_title();
+                //<meta name="Description" content="Written by A.N. Author, 
+                //Illustrated by V. Gogh, Price: $17.99, 
+                //Length: 784 pages">
+                $description = get_queried_object()->description;
+                $description = !empty( $description ) ? $description : get_bloginfo('description');
+                $keywords   = '';
+                $posts = get_posts(array('post_type' => get_queried_object()->name));
+                foreach($posts  as $post){
+                    $keywords_all   .= $post->post_title . ', ';
+                }
+                $keywords = $keywords_all;
+                $author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $this->ID ) );
+            }
+        }
+
+        $title = '<meta name="title" content="'. $title .' - TukuToi">';
+        $description = '<meta name="description" content="'. $description .'">';
+        $keywords = '<meta name="keywords" content="'. $keywords .'">';
+        $author = '<meta name="author" content="'. $author .'">';
+
+        $output = '<!-- Start Meta Tags -->'.$title.$description.$keywords.$author.'<!-- End Meta Tags -->';
+
+        echo $output;
 
     }
 
@@ -289,6 +362,7 @@ class Tw_Seo_Public {
 
         $schema_type    = $this->options[$this->plugin_name .'_schema_maps'];
         $logo           = $this->options[$this->plugin_name .'_logo'];
+        $image          = has_post_thumbnail( $this->ID ) ? wp_get_attachment_url( get_post_thumbnail_id($this->ID), 'thumbnail' ) : $logo;
         $description    = $this->options[$this->plugin_name .'_main_description'];
         $social         = explode( ',', $this->options[$this->plugin_name .'_social_media'] );
         $language       = TKT_WPML_IS_ACTIVE != false ? ICL_LANGUAGE_CODE : get_locale();
@@ -299,7 +373,7 @@ class Tw_Seo_Public {
         $main = array(
             '@context'      => "https://schema.org",
             '@type'         => "WebSite",
-            'dateModified'  => get_the_modified_date(),
+            'dateModified'  => get_the_modified_date('Y-m-d', $this->ID),//2021-04-09
             'description'   => $description,
             'headline'      => get_bloginfo( 'description' ),
             'inLanguage'    => $language,
@@ -310,7 +384,7 @@ class Tw_Seo_Public {
                 'sameAs'    => $social,
                 'logo'      => array(
                     '@type' => "ImageObject",
-                    'url'   =>$logo,
+                    'url'   => $logo,
                 ),
             ),
             'url'           => get_home_url(),
@@ -374,7 +448,6 @@ class Tw_Seo_Public {
         elseif( !empty( array_keys($schema_type, 'product') ) && is_singular( array_keys($schema_type, 'product') ) ) {//current post is mapped to product
             
             $brand          = get_post_meta($this->ID,'wpcf-tkt-seo-brand', true);
-            $image          = has_post_thumbnail( $post->ID ) ? wp_get_attachment_url( get_post_thumbnail_id($post->ID), 'thumbnail' ) : $this->options[$this->plugin_name .'_logo'];
             $rating         = get_post_meta($this->ID,'wpcf-rating', true);
             $rating_count   = get_post_meta($this->ID,'wpcf-rating-count', true);
             $review_count   = get_post_meta($this->ID,'wpcf-review-count', true);
@@ -467,8 +540,8 @@ class Tw_Seo_Public {
                     'url'       => get_the_author_meta('display_name', get_post($this->ID)->post_author) ? get_author_posts_url(get_the_author_meta( 'ID', get_post($this->ID)->post_author)) : get_home_url(),
                     ),
                 'commentCount'      => get_comments_number(),
-                'dateModified'      => get_the_modified_date(),
-                'datePublished'     => get_the_date(),
+                'dateModified'      => get_the_modified_date('Y-m-d', $this->ID),
+                'datePublished'     => get_the_date('Y-m-d', $this->ID),
                 'description'       => get_the_excerpt(get_post($this->ID)),
                 'headline'          => get_the_title(get_post($this->ID)) .' | '. get_bloginfo('name'),
                 'mainEntityOfPage'  => get_permalink(get_post($this->ID)),
@@ -482,8 +555,8 @@ class Tw_Seo_Public {
                         'url'   => $logo,
                     ),
                 ),
-                'url'               => get_permalink(get_post($this->ID)),
-                'image'             => has_post_thumbnail( $this->ID ) ? wp_get_attachment_url( get_post_thumbnail_id($this->ID), 'thumbnail' ) : $logo,
+                'url'               => get_permalink($this->ID),
+                'image'             => $image,
             );
 
             array_push( $schema, $single );
