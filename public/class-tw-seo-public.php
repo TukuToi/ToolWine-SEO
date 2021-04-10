@@ -223,8 +223,15 @@ class Tw_Seo_Public {
                 $author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $this->ID ) );
             }
         }
+		elseif(is_home()){
+			$title 	= get_bloginfo('name') . ' | ' .get_bloginfo('description');
+			/**
+			 * @todo do not hardcode this
+			 */
+			$author = get_the_author_meta( 'display_name', 1 );
+		}
 
-        $title = '<meta name="title" content="'. $title .' - TukuToi">';
+        $title = '<meta name="title" content="'. $title .'">';
         $description = '<meta name="description" content="'. $description .'">';
         $keywords = '<meta name="keywords" content="'. $keywords .'">';
         $author = '<meta name="author" content="'. $author .'">';
