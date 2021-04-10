@@ -42,6 +42,7 @@ label[for="tkt_feedback_limit"] {
 .tkt-option-input {
     float: right;
     min-width: 38%;
+    margin: auto;
 }
 .tkt-query-input {
     min-width: 300px;
@@ -56,4 +57,216 @@ label[for="tkt_feedback_limit"] {
 }
 div.main-dashboard-inner {
     padding: 15px;
+}
+span.select2-container{width:-webkit-fill-available !important;min-width: 38%;max-width: 500px;}
+small.tkt-x-small{font-size: 8px !important;}
+
+.tkt_modal {
+  align-items: center;
+  justify-content: center;
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100vw; /* Full width */
+  height: 100vh; /* Full height */
+  overflow: hidden; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.tkt_modal_header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #0269ac;
+  border-bottom: 1px solid #006bb1;
+  padding: 10px;
+  
+}
+/* Modal Content/Box */
+.tkt_modal_wrap {
+  background-color: #fefefe;
+  border: 1px solid #006bb1;
+  width: 53vw; /* Could be more or less, depending on screen size */
+  border-radius: 3px;
+}
+.tkt_modal_content {
+  height: 63vh;
+  overflow-x: scroll;
+  padding: 32px 36px 32px 36px;
+}
+.tkt_modal_content p{
+  font-size: 16px;
+  line-height: 25px;
+}
+
+/* The Close Button */
+.tkt_modal_close, .tkt_modal_title {
+  color: rgba(148,171,189,.62);
+  font-weight: bold;
+  margin-right: 16px;
+  font-size: 24px;
+}
+
+.tkt_modal_close:hover,
+.tkt_modal_close:focus {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tkt_button {
+  -moz-box-shadow: 3px 3px 4px 0px #02548a;
+  -webkit-box-shadow: 3px 3px 4px 0px #02548a;
+  box-shadow: 3px 3px 4px 0px #02548a;
+  background-color:#0268ac;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+  border:1px solid #006ab1;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Georgia;
+  font-size:17px;
+  padding:16px 25px;
+  text-decoration:none;
+  text-shadow:3px 3px 2px #02548a;
+
+}
+.tkt_button:hover {
+  background-color:#02548a;
+}
+.tkt_button:active {
+  position:relative;
+  top:1px;
+  -moz-box-shadow: 1px 1px 4px 0px #02548a;
+  -webkit-box-shadow: 1px 1px 4px 0px #02548a;
+  box-shadow: 1px 1px 4px 0px #02548a;
+}
+.tkt_absolute_tr{
+  position: absolute;
+  right: 7vw;
+  top: 7vh;
+}
+.tkt_grid_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(219px, 25%));
+  grid-auto-rows: 1fr;
+  word-break: break-word;
+}
+.tkt_grid_container::before {
+  content: '';
+  width: 0;
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+.tkt_grid_container > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.tkt_grid_item {
+  border: 1px solid #0269ac;
+  padding: 16px;
+  font-size: 17px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+  margin: 17px;
+  justify-content: center;
+  cursor: pointer;
+
+}
+.tkt_grid_title{
+  color:#0269ac;
+  flex-basis: 100%;
+}
+.tkt_grid_icon{
+  flex-basis: 100%;
+}
+.tkt_feedback{
+  display:none;
+  float: right;
+  height: 29px;
+  width: 125px;
+  border-radius: 3px;
+  font-size: 11px;
+  color:white;
+  text-align: center;
+}
+.tkt_success{
+  opacity: .61;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: green;
+}
+.tkt_error{
+  display:none;
+  opacity: .61;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+}
+.tkt_tooltip{
+  position: relative;
+}
+.tkt_tooltip .tkt_tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #0269ac;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 106.01%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tkt_tooltip .tkt_tooltiptext_tiny{
+  bottom: 116.1%;
+}
+
+.tkt_tooltip .tkt_tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0269ac transparent transparent transparent;
+}
+
+.tkt_tooltip:hover .tkt_tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.tkt_no_pointer{
+  cursor: inherit;
+}
+.tkt_link_pointer{
+  cursor: pointer;
+}
+.tkt_pad{
+  padding: 16px;
+}
+.tkt_float_r{
+  float: right;
+}
+
+.tkt_float_l{
+  float: left;
 }
