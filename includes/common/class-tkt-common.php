@@ -157,7 +157,7 @@ class TKT_Common {
      * @since    1.0.0
      * @access   private
      */
-    private function load(){
+    public function load(){
         $this->common_actions();
         foreach ($this->common_actions as $action) {
             $this->$action();
@@ -188,7 +188,7 @@ class TKT_Common {
      * @since 1.0.0
      * @access private
      */
-    public function set_general_options_callback($pre, $middle, $end, $locale) {
+    public function set_general_options_callback($pre, $middle, $end, $locale ) {
         echo '<p>' . __( $pre, $locale ) . '<strong>' . $middle . '</strong>' . __( $end, $locale ) . '</p>';
     } 
 
@@ -198,7 +198,7 @@ class TKT_Common {
      * @since 1.0.0
      * @access public
      */
-    public function set_render_settings_page_content( $active_tab = '', $field = '', $section = '', $locale = '' ) {
+    public function set_render_settings_page_content( $active_tab = '', $field = '', $section = '', $locale = '', $label = 'Save Settings', $additional_html = '') {
         
         ?>
         <div class="wrap">
@@ -209,6 +209,8 @@ class TKT_Common {
 
             <div>
                 <div class="main-dashboard-inner">
+                    <?php if(!empty($additional_html))
+                        echo $additional_html;?>
                     <form action="options.php" method="post">
                         <?php
                         // output security fields for the registered setting
@@ -216,7 +218,7 @@ class TKT_Common {
                         // output setting sections and their fields
                         do_settings_sections( $section );
                         // output save settings button
-                        submit_button( __( 'Save Settings', $locale  ) );
+                        submit_button( __( $label, $locale  ) );
                         ?>
                     </form>
                 </div>
@@ -407,18 +409,6 @@ class TKT_Common {
      */
     public function get_common_name(){
         return $this->common_name;
-    }
-
-    /**
-     * Maybe Load Common Code
-     *
-     * @since    1.0.0
-     * @access   public
-     */
-    public function maybe_load(){
-
-        $this->load();
-
     }
 
     /**
