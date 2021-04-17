@@ -269,7 +269,8 @@ class Tw_Seo_Public {
         $html .= '<meta property="og:title" content="' . $this->title . '"/>';
         $html .= '<meta property="og:description" content="' . $this->options[$this->plugin_name.'_main_description'] . '">';
         $html .= '<meta property="og:image" content="' . $this->image . '"/>';
-        $html .= '<meta property="fb:app_id" content="'. $this->options[$this->plugin_name .'_fbappid'] .'" />';
+		if( $this->options[$this->plugin_name .'_fbappid'] != '' && array_key_exists( $this->plugin_name .'_fbappid', $this->options ) )
+        	$html .= '<meta property="fb:app_id" content="'. $this->options[$this->plugin_name .'_fbappid'] .'" />';
         $html .= '<!-- End OpenGraph Tags -->';
 
         echo $html;
@@ -295,7 +296,8 @@ class Tw_Seo_Public {
      * @access public
      */
     public function add_google_gtag_js(){
-        
+        if( get_option( $this->plugin_name )[$this->plugin_name .'_gtag'] == '' || !isset(get_option( $this->plugin_name )[$this->plugin_name .'_gtag']) || !array_key_exists($this->plugin_name .'_gtag', get_option( $this->plugin_name )) )
+			return;
         $html  = '<!-- Global site tag (gtag.js) - Google Analytics -->';
         $html .= '<script async src="https://www.googletagmanager.com/gtag/js?id='. get_option( $this->plugin_name )[$this->plugin_name .'_gtag'] .'"></script>';
         $html .= '<script>';
