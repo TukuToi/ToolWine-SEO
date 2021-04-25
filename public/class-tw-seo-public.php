@@ -148,7 +148,7 @@ class Tw_Seo_Public {
                 $this->image = $this->options[$this->plugin_name .'_logo']; //replace this with a default image on your server or an image in your media library
             }
             else{
-                $this->image = esc_attr(wp_get_attachment_image_src( get_post_thumbnail_id( $this->ID, 'medium' ))[0]);
+                $this->image = esc_attr( wp_get_attachment_image_src( get_post_thumbnail_id( $this->ID ), 'full')[0] );
             }
             if( is_front_page() ) 
                 $this->title = get_bloginfo('name') . ' | ' . get_bloginfo('description');
@@ -223,13 +223,13 @@ class Tw_Seo_Public {
                 $author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $this->ID ) );
             }
         }
-		elseif(is_home()){
-			$title 	= get_bloginfo('name') . ' | ' .get_bloginfo('description');
-			/**
-			 * @todo do not hardcode this
-			 */
-			$author = get_the_author_meta( 'display_name', 1 );
-		}
+        elseif(is_home()){
+            $title  = get_bloginfo('name') . ' | ' .get_bloginfo('description');
+            /**
+             * @todo do not hardcode this
+             */
+            $author = get_the_author_meta( 'display_name', 1 );
+        }
 
         $title = '<meta name="title" content="'. $title .'">';
         $description = '<meta name="description" content="'. $description .'">';
@@ -263,13 +263,14 @@ class Tw_Seo_Public {
         $html .= '<meta property="twitter:url" content="'. $this->url .'">';
         $html .= '<meta property="twitter:title" content="'. $this->title .'">';
         $html .= '<meta property="twitter:description" content="'. $this->options[$this->plugin_name .'_main_description'] .'">';
-        $html .= '<meta property="twitter:image" content="'. $this->options[$this->plugin_name .'_logo'] .'">';
+        $html .= '<meta property="twitter:image" content="'. $this->image .'">';
         $html .= '<meta property="og:url" content="' . $this->url . '"/>';
         $html .= '<meta property="og:type" content="article" />';
         $html .= '<meta property="og:title" content="' . $this->title . '"/>';
         $html .= '<meta property="og:description" content="' . $this->options[$this->plugin_name.'_main_description'] . '">';
         $html .= '<meta property="og:image" content="' . $this->image . '"/>';
-        $html .= '<meta property="fb:app_id" content="'. $this->options[$this->plugin_name .'_fbappid'] .'" />';
+        if( $this->options[$this->plugin_name .'_fbappid'] != '' && array_key_exists( $this->plugin_name .'_fbappid', $this->options ) )
+            $html .= '<meta property="fb:app_id" content="'. $this->options[$this->plugin_name .'_fbappid'] .'" />';
         $html .= '<!-- End OpenGraph Tags -->';
 
         echo $html;
@@ -295,7 +296,8 @@ class Tw_Seo_Public {
      * @access public
      */
     public function add_google_gtag_js(){
-        
+        if( get_option( $this->plugin_name )[$this->plugin_name .'_gtag'] == '' || !isset(get_option( $this->plugin_name )[$this->plugin_name .'_gtag']) || !array_key_exists($this->plugin_name .'_gtag', get_option( $this->plugin_name )) )
+            return;
         $html  = '<!-- Global site tag (gtag.js) - Google Analytics -->';
         $html .= '<script async src="https://www.googletagmanager.com/gtag/js?id='. get_option( $this->plugin_name )[$this->plugin_name .'_gtag'] .'"></script>';
         $html .= '<script>';
