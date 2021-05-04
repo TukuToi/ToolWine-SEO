@@ -311,7 +311,7 @@ class Tw_Seo_Public {
     
     public function add_wp_missing_canonical_archives() {
 
-        if( is_archive() ) {
+        if( is_archive() || is_home() || is_front_page() ) {
 
             echo '<link rel="canonical" href="'. $this->url .'">';
 
