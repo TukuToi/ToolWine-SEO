@@ -305,6 +305,15 @@ class Tw_Seo_Admin {
             $sitemap .= '</url>';
 
         }
+        
+        foreach( array_keys( $options['tw_seo_sitemap'] ) as $post_type ){
+            $sitemap .= '<url>';
+            $sitemap .= '<loc>'. get_post_type_archive_link( $post_type ) .'</loc>';
+            $sitemap .= '<lastmod>'. rtrim(substr(get_lastpostdate('server', $post_type), 0, strrpos(get_lastpostdate('server', $post_type), ' '))) .'</lastmod>';//should be YYYY-MM-DD or YYYY-MM-DDThh:mmTZD
+            $sitemap .= '<changefreq>always</changefreq>';//always hourly daily weekly monthly yearly never
+            $sitemap .= '<priority>0.5</priority>';//0.0 to 1.0
+            $sitemap .= '</url>';
+        }
 
         $sitemap .= '</urlset>';
 
