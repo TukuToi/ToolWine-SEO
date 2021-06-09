@@ -226,6 +226,7 @@ class Tw_Seo_Public {
         elseif(is_home()){
             $title          = get_bloginfo('name') . ' | ' .get_bloginfo('description');
             $description    = $this->options[$this->plugin_name .'_main_description'];
+            $keywords       = $this->options[$this->plugin_name .'_main_keywords'];
             /**
              * @todo do not hardcode this
              */

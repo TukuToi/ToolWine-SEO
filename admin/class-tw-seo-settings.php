@@ -132,6 +132,7 @@ class Tw_Seo_Admin_Settings {
             $this->plugin_name .'_fbappid'          => "Add Facebook App ID",
             $this->plugin_name .'_logo'             => "Logo to use for SEO",
             $this->plugin_name .'_main_description' => "Main Website Description",
+            $this->plugin_name .'_main_keywords'    => "Main Website Keywords",
             $this->plugin_name .'_header'           => "Header Code",
             $this->plugin_name .'_schema_maps'      => "Post Types Schema Map",
             $this->plugin_name .'_sitemap'          => "Add Posts of these Types to Sitemap",
@@ -156,6 +157,7 @@ class Tw_Seo_Admin_Settings {
             $this->plugin_name .'_social_media'     => "facebook.com/your_page,twitter.com/your_account",
             $this->plugin_name .'_logo'             => has_custom_logo() ? wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ) , 'full' )[0] : '',
             $this->plugin_name .'_main_description' => get_bloginfo( 'description' ),
+            $this->plugin_name .'_main_keywords'    => "",
             $this->plugin_name .'_header'           => "",
             $this->plugin_name .'_schema_maps'      => get_post_types(array('public'=>true)),
             $this->plugin_name .'_sitemap'          => get_post_types(array('public'=>true)),
@@ -223,6 +225,14 @@ class Tw_Seo_Admin_Settings {
         ?><span class="description"><?php _e( 'Enter the main SEO description of your Website (<a href="https://schema.org/description" target="_blank"><code>description:</code></a>)', $this->plugin_name ); ?>
             </span>
             <input type="text" class="tkt-option-input" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args[$this->plugin_name .'_custom_data'] ); ?>" name="<?php echo $this->plugin_name ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $options[$this->plugin_name .'_main_description'] ? $options[$this->plugin_name .'_main_description'] : ''?>">
+        <?php
+    }
+    
+    public function tw_seo_main_keywords_cb( $args ) {
+        $options = get_option( $this->plugin_name );
+        ?><span class="keywords"><?php _e( 'Enter the main SEO Keywords of your Website', $this->plugin_name ); ?>
+            </span>
+            <input type="text" class="tkt-option-input" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args[$this->plugin_name .'_custom_data'] ); ?>" name="<?php echo $this->plugin_name ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $options[$this->plugin_name .'_main_keywords'] ? $options[$this->plugin_name .'_main_keywords'] : ''?>">
         <?php
     }
 
