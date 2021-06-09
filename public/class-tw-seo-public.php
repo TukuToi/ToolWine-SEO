@@ -224,7 +224,8 @@ class Tw_Seo_Public {
             }
         }
         elseif(is_home()){
-            $title  = get_bloginfo('name') . ' | ' .get_bloginfo('description');
+            $title          = get_bloginfo('name') . ' | ' .get_bloginfo('description');
+            $description    = $this->options[$this->plugin_name .'_main_description'];
             /**
              * @todo do not hardcode this
              */
@@ -309,12 +310,15 @@ class Tw_Seo_Public {
 
     }
     
+    /**
+     * WordPress misses canonical on archives for whatever reason unknown.
+     */
     public function add_wp_missing_canonical_archives() {
 
         if( is_archive() || is_home() || is_front_page() ) {
-
+            
             echo '<link rel="canonical" href="'. $this->url .'">';
-
+            
         }
 
     }
